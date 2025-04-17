@@ -3,6 +3,7 @@ import React from "react";
 import { Avatar } from "react-native-paper";
 import { ChevronRight } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 
 const menuData = [
   {
@@ -34,6 +35,8 @@ const menuData = [
 ];
 
 export default function Menu() {
+  const userData = useSelector(state=>state.auth.userData)
+  console.log(userData)
   return (
     <View >
       {/* Profile Header */}
@@ -41,11 +44,11 @@ export default function Menu() {
         <View className="flex-row gap-8 items-center">
           <Avatar.Image
             size={72}
-            source={{ uri: "https://files.catbox.moe/m70k7i.png" }}
+            source={{ uri: userData?.data.avatar }}
           />
           <View className="flex-col">
-            <Text className="text-2xl text-white font-bold">Shashank Pandey</Text>
-            <Text className="text-white mb-2">9864691673</Text>
+            <Text className="text-2xl text-white font-bold">{userData?.data.fullName || "Loading..." }</Text>
+            <Text className="text-white mb-2">{userData.data.email}</Text>
             <TouchableOpacity className="bg-gray-800 p-1 px-2 rounded-md max-w-28">
               <Text className="text-white text-center">Edit Profile</Text>
             </TouchableOpacity>

@@ -17,7 +17,7 @@ import AdminVendingEdit from "../machines/edit/[id]";
 
 
 export function MachineCard({ id, location, status, onEdit }) {
-  const theme = useTheme();
+  // const theme = useTheme();
   const lightModeLogo = "https://files.catbox.moe/a7kpfd.png";
   const darkModeLogo = "https://files.catbox.moe/6616hk.png";
   const router = useRouter()
@@ -27,27 +27,27 @@ export function MachineCard({ id, location, status, onEdit }) {
       router.push(`/products/${id}`)
     }}
       style={{
-        backgroundColor: theme.colors.surfaceVariant,
+        backgroundColor: "#ddd",
         borderRadius: 16,
         margin: 16,
         padding: 16,
         flexDirection: "row",
         alignItems: "center",
-        shadowColor: theme.colors.shadow,
+        // shadowColor: theme.colors.shadow,
         shadowOpacity: 0.1,
         shadowRadius: 10,
         elevation: 3,
       }}
     >
       <Image
-        source={{ uri: theme.dark ? darkModeLogo : lightModeLogo }}
+        source={{ uri: lightModeLogo }}
         style={{ width: 64, height: 64 }}
         resizeMode="contain"
       />
       <View style={{ flex: 1, marginLeft: 16 }}>
         <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}>
-          <MapPin size={16} color={theme.colors.onSurfaceVariant} />
-          <Text style={{ marginLeft: 8, color: theme.colors.onSurfaceVariant, fontWeight: "bold" }}>
+          <MapPin size={16} color="black" />
+          <Text style={{ marginLeft: 8, color: "black", fontWeight: "bold" }}>
             {location}
           </Text>
         </View>
@@ -57,25 +57,25 @@ export function MachineCard({ id, location, status, onEdit }) {
               style={{
                 width: 12,
                 height: 12,
-                backgroundColor: status ? theme.colors.primary : theme.colors.error,
+                backgroundColor: status ? "green" : "red",
                 borderRadius: 6,
                 marginRight: 8,
               }}
             />
-            <Text style={{ color: theme.colors.onSurfaceVariant }}>
+            <Text style={{ color: status ? "green" : "red" }}>
               {status ? "Active" : "Inactive"}
             </Text>
           </View>
           <TouchableOpacity
             style={{
-              backgroundColor: theme.colors.primaryContainer,
+              backgroundColor: "#ea580c",
               paddingHorizontal: 12,
               paddingVertical: 8,
               borderRadius: 8,
             }}
             onPress={onEdit}
           >
-            <Text style={{ color: theme.colors.onPrimaryContainer }}>Edit</Text>
+            <Text className="font-bold" style={{color: "white", fontWeight: "bold"}}>Edit</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -84,10 +84,11 @@ export function MachineCard({ id, location, status, onEdit }) {
 }
 
 export default function AdminVendingMachinesUI() {
-  const theme = useTheme();
+  // const theme = useTheme();
   const [selectedMachineId, setSelectedMachineId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const userData = useSelector((state) => state.auth.userData);
+  const router = useRouter()
 
   const { data: vendingMachines, isLoading, error, refetch } = useQuery({
     queryKey: ["vendingMachines", userData],
@@ -97,8 +98,10 @@ export default function AdminVendingMachinesUI() {
     },
   });
 
-  if (isLoading) return <Text style={{ textAlign: "center", fontSize: 18 }}>Loading...</Text>;
-  if (error) return <Text>Error... {error.toString()}</Text>;
+  // if (isLoading) return <Text style={{ textAlign: "center", fontSize: 18 }}>Loading...</Text>;
+  if (error) {
+    router.push("/auth/login")
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -108,12 +111,14 @@ export default function AdminVendingMachinesUI() {
       </Text>
       </View>
 
-      <Link className="m-4" href="/machines/create" style={{ backgroundColor: theme.colors.primary, padding: 12, borderRadius: 8, marginBottom: 16 }}>
-        <Text style={{ color: theme.colors.onPrimary, textAlign: "center", fontSize: 18, fontWeight: "bold" }}>Add Machine</Text>
-      </Link>
-      <FlatList
+      {/* <Link className="m-4 bg-orange-600" href="/machines/create" style={{ padding: 12, borderRadius: 8, marginBottom: 16, backgroundColor: "#ea580c" }}>
+        <Text className="text-white" style={{color: "white", textAlign: "center", fontSize: 18, fontWeight: "bold"}}>Add Machine</Text>
+      </Link> */}
+
+      {isLoading ? (<Text style={{ textAlign: "center", fontSize: 18 }}>Loading...</Text>) : <FlatList
         data={vendingMachines}
         keyExtractor={(item) => item._id}
+        // className="border-t-4 border-green-400"
         renderItem={({ item }) => (
           <MachineCard
           id={item._id}
@@ -125,8 +130,8 @@ export default function AdminVendingMachinesUI() {
             }}
           />
         )}
-        ListEmptyComponent={<Text style={{ textAlign: "center", color: theme.colors.onSurfaceVariant }}>No vending machines found.</Text>}
-      />
+        ListEmptyComponent={<Text style={{ textAlign: "center", color: "green" }}>No vending machines found.</Text>}
+      />}
       <Modal visible={modalVisible} animationType="fade" transparent={true}>
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
           <View style={{ backgroundColor: "white", padding: 20, borderRadius: 10, width: "80%", height: "30%" }}>

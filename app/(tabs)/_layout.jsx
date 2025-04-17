@@ -1,12 +1,14 @@
 import { View, Text } from "react-native";
-import React, { useState } from "react";
-import { Tabs } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {  Tabs, useRouter } from "expo-router";
 import { Home, Server, Bell, Settings, LayoutTemplate } from "lucide-react-native";
 import { Badge } from "react-native-paper";
 import App from ".";
 import { MachineCard } from "./machines";
+import { useSelector } from "react-redux";
 
 export default function _layout() {
+  const router = useRouter()
   // Dummy Notification Data
   const [notifications] = useState([
     { id: 1, title: "New order received", read: false },
@@ -16,6 +18,16 @@ export default function _layout() {
 
   // Count unread notifications
   const unreadCount = notifications.filter((n) => !n.read).length;
+  const userData = useSelector((state) => state.auth.userData);
+
+
+  useEffect(() => {
+  if (!userData) {
+    // router.push("/login")
+    console.log("/login")
+  }
+  }, [])
+  
 
   return (
     <Tabs

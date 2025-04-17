@@ -13,6 +13,7 @@ import { login, logout } from "../../store/authSlice";
 // import { loginUser } from "../../../components/api";
 import { useRouter } from "expo-router";
 import { loginUser } from "../../components/api";
+import { SafeAreaView } from "react-native-safe-area-context";
 // import { useNavigation } from "@react-navigation/native";
 
 export default function Login() {
@@ -41,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
         <Wallet size={144} style={styles.logo} />
         <Text style={styles.title}>Sign in to your account</Text>
@@ -80,7 +81,7 @@ export default function Login() {
           </Text>
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
